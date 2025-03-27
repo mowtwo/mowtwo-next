@@ -1,0 +1,22 @@
+html,body {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+}
+
+.copyright {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.copyright:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}

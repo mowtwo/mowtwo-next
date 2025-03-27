@@ -4,15 +4,35 @@ const canvas = document.createElement('canvas');
 document.body.appendChild(canvas);
 const ctx = canvas.getContext('2d')!;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function updateCanvasSize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+updateCanvasSize();
 
 let mouseX = canvas.width / 2;
 let mouseY = canvas.height / 2;
 
+function updateMousePosition(x: number, y: number) {
+  mouseX = x;
+  mouseY = y;
+}
+
 canvas.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
+  updateMousePosition(e.clientX, e.clientY);
+});
+
+canvas.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  updateMousePosition(touch.clientX, touch.clientY);
+});
+
+window.addEventListener('resize', () => {
+  updateCanvasSize();
+  mouseX = canvas.width / 2;
+  mouseY = canvas.height / 2;
 });
 
 let hue1 = Math.random() * 360;
@@ -75,6 +95,8 @@ class Particle {
   }
 }
 
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
 class SkillBall {
   x: number
   y: number
@@ -93,10 +115,11 @@ class SkillBall {
     const speed = 8 + Math.random() * 5
     this.vx = Math.cos(angle) * speed
     this.vy = Math.sin(angle) * speed
-    this.size = 50 * (skill.value / 100)
+    const baseSize = isMobile ? window.innerWidth / 8 : window.innerWidth / 30
+    this.size = Math.min(100, baseSize) * (skill.value / 100)
     this.label = skill.label
     this.bounceCount = 0
-    this.maxBounces = Math.floor(Math.random() * 3) + 8 // 8-10次反弹
+    this.maxBounces = Math.floor(Math.random() * 3) + 8
     this.active = true
   }
 
@@ -154,13 +177,23 @@ class SkillBall {
 const balls: SkillBall[] = []
 const particles: Particle[] = []
 
-canvas.addEventListener('click', (e) => {
+function createBall(x: number, y: number) {
   if (balls.length >= 100) {
     balls.shift() // 移除最早创建的小球
   }
   const skill = skills[Math.floor(Math.random() * skills.length)]
-  const ball = new SkillBall(e.clientX, e.clientY, skill)
+  const ball = new SkillBall(x, y, skill)
   balls.push(ball)
+}
+
+canvas.addEventListener('click', (e) => {
+  createBall(e.clientX, e.clientY)
+})
+
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault()
+  const touch = e.touches[0]
+  createBall(touch.clientX, touch.clientY)
 })
 
 window.addEventListener('keydown', (e) => {
@@ -229,7 +262,9 @@ function animate() {
   for (const particle of particles) {
     particle.draw()
   }
-  ctx.font = 'bold 400px Arial';
+  ctx.font = `bold ${Math.min(200, window.innerWidth / 4)}px Arial`;
+ctx.imageSmoothingEnabled = true;
+ctx.imageSmoothingQuality = 'high';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#000';
@@ -252,20 +287,21 @@ function animate() {
   ctx.fillText('M2', canvas.width / 2 + offsetX, canvas.height / 2 + offsetY);
 
   // Draw instruction text
-  ctx.font = '20px Arial';
+  ctx.font = `${Math.min(isMobile ? 32 : 20, isMobile ? window.innerWidth / 20 : window.innerWidth / 40)}px Arial`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   const textOffsetX = (mouseX - canvas.width / 2) / 100;
   const textOffsetY = (mouseY - canvas.height / 2) / 100;
-  const textWidth = ctx.measureText('点击屏幕 或 按下空格').width;
-  const padding = 10;
-  const radius = 20;
+  const instructionText = isMobile ? '点击屏幕' : '点击屏幕 或 按下空格';
+  const textWidth = ctx.measureText(instructionText).width;
+  const padding = Math.min(isMobile ? 24 : 10, isMobile ? window.innerWidth / 40 : window.innerWidth / 80);
+  const radius = Math.min(isMobile ? 48 : 20, isMobile ? window.innerWidth / 20 : window.innerWidth / 40);
   ctx.beginPath();
   ctx.roundRect(canvas.width / 2 + textOffsetX - textWidth / 2 - padding, canvas.height - 40 + textOffsetY, textWidth + padding * 2, 30, radius);
   ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
   ctx.fill();
   ctx.fillStyle = '#fff';
-  ctx.fillText('点击屏幕 或 按下空格', canvas.width / 2 + textOffsetX, canvas.height - 25 + textOffsetY);
+  ctx.fillText(instructionText, canvas.width / 2 + textOffsetX, canvas.height - 25 + textOffsetY);
 
 
   requestAnimationFrame(animate);

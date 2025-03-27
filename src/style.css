@@ -15,6 +15,7 @@ html,body {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  white-space: nowrap;
 }
 
 .copyright:hover {

@@ -52,6 +52,16 @@ const projects: Project[] = [
     zhDescription:
       '个人交互前端实验场，包含 Canvas、Three.js/WebGL 视觉、媒体处理和浏览器原生能力探索。',
   },
+  {
+    name: 'enterprise-context-layer',
+    url: 'https://github.com/mowtwo/enterprise-context-web',
+    meta: 'React / FastAPI / pgvector · AI Full-stack Demo',
+    description:
+      'A local-first RAG product demo with file ingestion, citations, retrieval debug, audit logs, Docker deployment, and swappable embedding/chat providers.',
+    zhMeta: 'React / FastAPI / pgvector · AI 全栈 Demo',
+    zhDescription:
+      '一个本地优先的 RAG 产品 demo，包含文件导入、引用来源、检索调试、审计日志、Docker 部署，以及可切换的 embedding/chat provider。',
+  },
 ]
 
 const copy = {

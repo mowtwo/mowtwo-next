@@ -254,6 +254,13 @@ body[data-panel="projects"] #projects-panel {
   padding: 18px;
 }
 
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
 .project-meta {
   color: #7dd3fc !important;
   font-size: 12px !important;
@@ -353,5 +360,9 @@ body[data-panel="projects"] #projects-panel {
 
   .project-card a {
     width: 100%;
+  }
+
+  .project-links {
+    justify-content: stretch;
   }
 }

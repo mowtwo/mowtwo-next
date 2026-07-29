@@ -10,6 +10,11 @@ type Skill = {
 type Project = {
   name: string
   url: string
+  links?: {
+    label: string
+    zhLabel: string
+    url: string
+  }[]
   meta: string
   description: string
   zhMeta: string
@@ -55,6 +60,18 @@ const projects: Project[] = [
   {
     name: 'enterprise-context-layer',
     url: 'https://github.com/mowtwo/enterprise-context-web',
+    links: [
+      {
+        label: 'Frontend',
+        zhLabel: '前端',
+        url: 'https://github.com/mowtwo/enterprise-context-web',
+      },
+      {
+        label: 'API',
+        zhLabel: '后端',
+        url: 'https://github.com/mowtwo/enterprise-context-api',
+      },
+    ],
     meta: 'React / FastAPI / pgvector · AI Full-stack Demo',
     description:
       'A local-first RAG product demo with file ingestion, citations, retrieval debug, audit logs, Docker deployment, and swappable embedding/chat providers.',
@@ -204,7 +221,15 @@ app.innerHTML = `
                   <p class="project-meta" data-project-field="meta">${project.meta}</p>
                   <p data-project-field="description">${project.description}</p>
                 </div>
-                <a href="${project.url}" target="_blank" rel="noreferrer" data-i18n="viewRepo">View repository</a>
+                <div class="project-links">
+                  ${(project.links ?? [{ label: 'Repository', zhLabel: '仓库', url: project.url }])
+                    .map(
+                      (link) => `
+                        <a href="${link.url}" target="_blank" rel="noreferrer" data-link-label="${link.label}" data-link-zh-label="${link.zhLabel}">${link.label}</a>
+                      `,
+                    )
+                    .join('')}
+                </div>
               </article>
             `,
           )
@@ -247,6 +272,9 @@ function applyLanguage(language: Locale) {
     const description = card.querySelector<HTMLElement>('[data-project-field="description"]')
     if (meta) meta.textContent = language === 'zh' ? project.zhMeta : project.meta
     if (description) description.textContent = language === 'zh' ? project.zhDescription : project.description
+    card.querySelectorAll<HTMLAnchorElement>('[data-link-label]').forEach((link) => {
+      link.textContent = language === 'zh' ? link.dataset.linkZhLabel || '' : link.dataset.linkLabel || ''
+    })
   })
 }
 

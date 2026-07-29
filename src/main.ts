@@ -156,7 +156,7 @@ app.innerHTML = `
     </section>
 
     <section class="panel" id="cv-panel" aria-labelledby="cv-title">
-      <a class="close" href="#home" aria-label="Close CV" data-i18n-aria="closeCv">×</a>
+      <a class="close" href="/" aria-label="Close CV" data-close-panel data-i18n-aria="closeCv">×</a>
       <p class="panel-kicker" data-i18n="cv">CV</p>
       <h2 id="cv-title" data-i18n="cvTitle">Chen Wencheng · AI Full-stack Engineer</h2>
       <div class="cv-grid">
@@ -181,7 +181,7 @@ app.innerHTML = `
     </section>
 
     <section class="panel" id="projects-panel" aria-labelledby="projects-title">
-      <a class="close" href="#home" aria-label="Close Projects" data-i18n-aria="closeProjects">×</a>
+      <a class="close" href="/" aria-label="Close Projects" data-close-panel data-i18n-aria="closeProjects">×</a>
       <p class="panel-kicker" data-i18n="projectsKicker">Projects</p>
       <h2 id="projects-title" data-i18n="projectsTitle">Core GitHub Projects</h2>
       <div class="project-list">
@@ -852,7 +852,18 @@ function animate(now = 0) {
 }
 
 function handleHash() {
-  document.body.dataset.panel = window.location.hash.replace('#', '') || 'home'
+  const panel = window.location.hash.replace('#', '')
+  if (panel === 'home') {
+    closePanel()
+    return
+  }
+  document.body.dataset.panel = panel || 'home'
+}
+
+function closePanel() {
+  const cleanUrl = `${window.location.pathname}${window.location.search}`
+  window.history.replaceState(null, '', cleanUrl)
+  document.body.dataset.panel = 'home'
 }
 
 buildStars()
@@ -864,6 +875,12 @@ spawnIdleSphere(new THREE.Vector3(3.4, 4.1, 1))
 
 window.addEventListener('resize', onResize)
 window.addEventListener('hashchange', handleHash)
+document.querySelectorAll<HTMLAnchorElement>('[data-close-panel]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault()
+    closePanel()
+  })
+})
 window.addEventListener('pointermove', (event) => updatePointer(event.clientX, event.clientY))
 window.addEventListener('pointerdown', (event) => {
   const target = event.target as HTMLElement
@@ -876,7 +893,7 @@ window.addEventListener('keydown', (event) => {
     spawnSphere(new THREE.Vector3(0, 0, 0))
   }
   if (event.code === 'Escape') {
-    window.location.hash = 'home'
+    closePanel()
   }
 })
 

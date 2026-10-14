@@ -32,6 +32,12 @@ body,
   min-height: 100%;
   width: 100%;
 }
+/* nothing may widen the page — the helix cards stick out sideways in 3D.
+   `clip` (unlike `hidden`) keeps position: sticky working for the acts. */
+html,
+body {
+  overflow-x: clip;
+}
 
 body {
   background: var(--bg);
@@ -39,7 +45,20 @@ body {
   font-family: var(--mono);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  /* it's a piece to look at and drag, not a document: no selection, no long-press menu, no tap flash */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+input,
+textarea,
+.contact-value,
+.selectable {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
 }
 :lang(zh) body,
 html:lang(zh-CN) body {
@@ -80,6 +99,7 @@ button {
 
 .film {
   position: relative;
+  overflow-x: clip;
   z-index: 2;
   opacity: 0;
   transition: opacity 1.2s ease;
@@ -1064,6 +1084,11 @@ input::placeholder {
 /* ------------------------------------------------------------ mobile -- */
 
 @media (max-width: 760px) {
+  /* iOS zooms into inputs smaller than 16px */
+  input,
+  textarea {
+    font-size: 16px !important;
+  }
   .act-hud .act-inner {
     position: relative;
     inset: auto;

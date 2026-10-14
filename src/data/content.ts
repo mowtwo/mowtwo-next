@@ -19,7 +19,10 @@ export const profile = {
     github: 'https://github.com/mowtwo',
     site: 'https://mowtwo.com',
     email: 'mowtwo@foxmail.com',
+    /** how this site was built: workflow, MCP tooling, skills and the full prompt set */
+    playbook: 'https://github.com/mowtwo/m2-site-playbook',
   },
+  playbookLabel: { en: 'How this site was built — the agent playbook', zh: '这个网站是怎么做出来的 · Agent 全流程手册' } as L,
 }
 
 /* ------------------------------------------------------------------ acts -- */

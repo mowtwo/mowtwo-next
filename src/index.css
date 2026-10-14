@@ -201,6 +201,30 @@ button {
   font-size: clamp(12px, 1.3vw, 14px);
   color: var(--accent);
 }
+.playbook-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--fg);
+  transition: border-color 0.3s, box-shadow 0.3s, color 0.3s;
+}
+.playbook-link:hover {
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.playbook-tag {
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
 .act-foot {
   margin-top: 40px;
   font-size: 11px;

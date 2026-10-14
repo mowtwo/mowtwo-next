@@ -145,6 +145,10 @@ export function ActSignal() {
           </a>
         ))}
       </div>
+      <a className="playbook-link" href={profile.links.playbook} target="_blank" rel="noreferrer">
+        <span className="playbook-tag">{t({ en: 'Making of', zh: '幕后' })}</span>
+        {t(profile.playbookLabel)} -&gt;
+      </a>
       <p className="act-foot">
         {t(profile.location)} · © {YEAR} {profile.handle}
       </p>

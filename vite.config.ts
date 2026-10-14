@@ -62,6 +62,7 @@ function seo(site: string): Plugin {
         worksFor: { '@type': 'Organization', name: 'RankAI', url: 'https://rankai.ai' },
         knowsAbout: skills.flatMap((g) => g.items),
         sameAs: [profile.links.github, profile.links.site],
+        subjectOf: { '@type': 'CreativeWork', name: profile.playbookLabel.en, url: profile.links.playbook },
       },
       {
         '@type': 'ItemList',
@@ -132,7 +133,7 @@ function seo(site: string): Plugin {
                 .join(' · ')}</p></li>`,
           )
           .join('')}</ul></section>
-        <section><h2>Contact · 联系</h2><p><a href="mailto:${esc(profile.links.email)}">${esc(profile.links.email)}</a> · <a href="${esc(profile.links.github)}">GitHub</a> · <a href="${esc(profile.links.site)}">mowtwo.com</a></p></section>
+        <section><h2>Contact · 联系</h2><p><a href="mailto:${esc(profile.links.email)}">${esc(profile.links.email)}</a> · <a href="${esc(profile.links.github)}">GitHub</a> · <a href="${esc(profile.links.site)}">mowtwo.com</a></p><p><a href="${esc(profile.links.playbook)}">${both(profile.playbookLabel)}</a></p></section>
       </main>
     </noscript>`
 
@@ -156,6 +157,7 @@ function seo(site: string): Plugin {
     '',
     '## More',
     `- [Full text for LLMs](${url}/llms-full.txt): about, experience, skills and every project in both languages`,
+    `- [How this site was built](${profile.links.playbook}): the agent playbook — workflow, MCP tooling, skills and the full prompt set`,
     '',
   ].join('\n')
 
@@ -187,6 +189,9 @@ function seo(site: string): Plugin {
     `- Email: ${profile.links.email}`,
     `- GitHub: ${profile.links.github}`,
     `- Site: ${url}/`,
+    '',
+    '## Making of',
+    `- ${profile.playbookLabel.en}: ${profile.links.playbook}`,
     '',
   ].join('\n')
 
